@@ -1,0 +1,48 @@
+*.log
+.DS_Store
+Thumbs.db
+
+# Environment
+.env
+.env.backup
+.env.production
+auth.json
+
+# IDE / Editor
+.idea
+.vscode
+.zed
+.cursor
+.nova
+.phpactor.json
+
+# PHP / Laravel
+vendor
+_ide_helper.php
+.phpunit.result.cache
+.phpunit.cache
+/storage/*.key
+/storage/pail
+/public/storage
+
+# Frontend
+node_modules
+/public/build
+/public/hot
+/public/fonts-manifest.dev.json
+
+# Laravel Sail / Docker
+docker-compose.override.yml
+compose.override.yaml
+
+# Homestead
+Homestead.json
+Homestead.yaml
+
+# Cache
+bootstrap/cache/*.php
+bootstrap/cache/packages.php
+bootstrap/cache/services.php
+bootstrap/cache/config.php
+bootstrap/cache/routes-v7.php
+bootstrap/cache/events.php
