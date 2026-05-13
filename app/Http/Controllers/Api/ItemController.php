@@ -11,9 +11,23 @@ use App\Http\Resources\ItemResource;
 
 class ItemController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $items = Item::latest()->get();
+        $keyword = $request->query('keyword');
+        $sort = $request->sort ?? 'desc';
+        $status = $request->query('status');
+
+        $items = Item::query()
+            ->orderby('name', $sort)
+            ->when($keyword, function ($query, $keyword) {
+                $query->where('name', 'like', "%{$keyword}%");
+            })
+            ->when($status, function ($query, $status) {
+                $query->where('status', 'like', "{$status}");
+            })
+            ->latest()
+            ->get();
+
         return ItemResource::collection($items);
     }
 
