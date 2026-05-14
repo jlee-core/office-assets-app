@@ -45,8 +45,9 @@
         ],
         "dev": [
             "Composer\\Config::disableProcessTimeout",
+            "bash -c 'kill -9 $(lsof -ti :5173) 2>/dev/null || true'",
             "./vendor/bin/sail up -d",
-            "npx concurrently -c \"#c4b5fd,#fb7185,#fdba74\" \"./vendor/bin/sail artisan queue:work --tries=1 --timeout=0\" \"./vendor/bin/sail artisan pail --timeout=0\" \"./vendor/bin/sail npm run dev\" --names=queue,logs,vite --kill-others" 
+            "npx concurrently -c \"#c4b5fd,#fb7185,#fdba74\" \"./vendor/bin/sail artisan queue:work --tries=1 --timeout=0\" \"./vendor/bin/sail artisan pail --timeout=0\" \"./vendor/bin/sail npm run dev\" --names=queue,logs,vite --kill-others"
         ],
         "test": [
             "@php artisan config:clear --ansi @no_additional_args",
