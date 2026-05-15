@@ -5,10 +5,11 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use App\Enums\ItemStatus;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Item extends Model
 {
-    use HasUuids;
+    use HasUuids, HasFactory;
 
     protected $fillable = [
         'name',
