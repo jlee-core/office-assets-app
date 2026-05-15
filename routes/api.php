@@ -11,3 +11,9 @@ Route::get('/user', function (Request $request) {
 
 Route::apiResource('items', ItemController::class);
 Route::apiResource('categories', CategoryController::class);
+
+Route::get('/health', function() {
+    return response()->json([
+        'message' => 'API is working',
+    ]);
+});
