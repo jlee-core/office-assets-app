@@ -11,6 +11,28 @@ use Illuminate\Validation\ValidationException;
 
 class AuthController extends Controller
 {
+    public function show(Request $request): JsonResponse
+    {
+        $users = User::with('tokens')->get()->map(function ($user) {
+
+            $isLogin = $user->tokens->isNotEmpty();
+
+            return [
+                'id' => $user->id,
+                'name' => $user->name,
+                'email' => $user->email,
+                'is_login' => $isLogin,
+                'status' => $isLogin
+                    ? 'ログイン中'
+                    : '未ログイン',
+            ];
+        });
+
+        return response()->json([
+            'users' => $users,
+        ]);
+    }
+
     public function register(Request $request): JsonResponse
     {
         $validated = $request->validate([
@@ -25,16 +47,13 @@ class AuthController extends Controller
             'password' => Hash::make($validated['password']),
         ]);
 
-        $token = $user->createToken('api-token')->plainTextToken;
-
         return response()->json([
             'message' => 'ユーザー登録が完了しました。',
             'user' => [
                 'id' => $user->id,
                 'name' => $user->name,
                 'email' => $user->email,
-            ],
-            'token' => $token,
+            ]
         ], 201);
     }
 
