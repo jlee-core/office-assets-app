@@ -6,6 +6,7 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
 use App\Models\Item;
+
 class ItemApiTest extends TestCase
 {
     use RefreshDatabase;
@@ -21,7 +22,8 @@ class ItemApiTest extends TestCase
             ->assertJsonCount(5, 'data');
     }
 
-    public function test_store_returns_validation_errors(): void {
+    public function test_store_returns_validation_errors(): void
+    {
         $response = $this->postJson('/api/items', [
             'name' => '',
             'category' => '',
@@ -29,7 +31,8 @@ class ItemApiTest extends TestCase
         ]);
     }
 
-    public function test_invalid_item_is_not_saved(): void {
+    public function test_invalid_item_is_not_saved(): void
+    {
         $this->postJson('/api/items', [
             'name' => '',
             'category' => '',
@@ -37,5 +40,32 @@ class ItemApiTest extends TestCase
         ]);
 
         $this->assertDatabaseCount('items', 0);
+    }
+
+    public function test_returns_404_when_item_not_found(): void
+    {
+        $response = $this->getJson('/api/items/9999');
+        $response->assertNotFound();
+    }
+
+    public function test_can_create_item(): void
+    {
+        $response = $this->postJson('/api/items', [
+            'name' => 'テストモニター',
+            'category' => '周辺機器',
+            'location' => '東京本社',
+            'status' => 'available',
+            'note' => '追加課題用',
+        ]);
+
+        $response
+            ->assertCreated()
+            ->assertJsonPath('data.name', 'テストモニター');
+
+        $this->assertDatabaseHas('items', [
+            'name' => 'テストモニター',
+            'category' => '周辺機器',
+            'status' => 'available',
+        ]);
     }
 }
